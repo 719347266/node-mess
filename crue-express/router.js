@@ -49,4 +49,16 @@ router.post('/students/edit',(req,res)=>{
     res.redirect('/students')
   })
 })
+
+router.get('/students/delete',(req,res)=>{
+  console.log(req.query.id);
+  students.deleteById(req.query.id,(err)=>{
+    if (err){
+      return res.statusCode(500).send('error')
+    }
+    res.redirect('/students')
+  })
+})
+
+
 module.exports = router

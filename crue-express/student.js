@@ -56,8 +56,9 @@ exports.updataId = function (student,callback) {
       return callback(err)
     }
     let students = JSON.parse(data).students
+    student.id = parseInt(student.id)
     let stu =  students.find(item=>{
-      return item.id == parseInt(student.id)
+      return item.id === student.id
     })
     for(let key in student){
       stu[key] = student[key]
@@ -75,5 +76,24 @@ exports.updataId = function (student,callback) {
 /**
  * 删除学生列表
  */
-exports.dele = function (callback) {
+exports.deleteById = function (id,callback) {
+  fs.readFile('./db.json','utf8',(err,data)=>{
+    if (err){
+      return callback(err)
+    }
+    let students = JSON.parse(data).students
+    let studentIndex = students.findIndex(item=>{
+      return item.id === parseInt(id)
+    })
+    students.splice(studentIndex,1)
+    let fileData = JSON.stringify({students})
+
+    fs.writeFile('./db.json',fileData,err=>{
+      if (err){
+        return callback(err)
+      }
+      callback()
+    })
+  })
+
 }
